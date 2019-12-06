@@ -1,0 +1,51 @@
+<div class="container">
+
+  <h1 class="text-primary text-center">Playlists!</h1>
+  <hr>
+
+  <div *ngIf="isLoading" class="text-center">
+    <h5 class="text-primary text-center">Playlist Loading</h5>
+      <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <ngb-tabset *ngIf="!isLoading">
+    <ngb-tab *ngFor="let play of playlists | async" title="{{play.name}}" >
+      <ng-template ngbTabContent>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Album</th>
+            <th scope="col">Artist</th>
+            <th scope="col">Composer</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Name</th>
+            <th scope="col">Kind</th>
+            <th scope="col">Sort Album</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let track of play.trackList; index as i">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ track.album}}</td>
+            <td>{{ track.composer}}</td>
+            <td>{{ track.artist}}</td>
+            <td>{{ track.genre}}</td>
+            <td>{{ track.name}}</td>
+            <td>{{ track.kind}}</td>
+            <td>{{ track.sortAlbum}}</td>
+            <td><button class="btn btn-primary btn-sm" (click)="onEdit(track)">Edit</button></td>
+            <td><button class="btn btn-danger btn-sm">Delete</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+</div>
