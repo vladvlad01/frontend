@@ -1,7 +1,22 @@
 <div class="container">
 
   <h1 class="text-primary text-center">Playlists!</h1>
-  <hr>
+
+  <form class="form-inline float-right" [formGroup]="trackForm" (ngSubmit)="onAddPlaylist()">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="playlistsId" class="sr-only">Password</label>
+        <select  class="form-control form-control-sm" id="playlistsId">
+          <option value="-1" [disabled]="true">Select a playlist</option>
+          <option value="Playlist1">Playlist One</option>
+          <option value="Playlist2">Playlist Two</option>
+          <option value="Playlist3">Playlist Three</option>
+        </select>
+      </div>
+    <button type="submit" class="btn btn-primary btn-sm mb-2">Add Playlist</button>
+    <button type="button" class="btn btn-danger btn-sm mb-2 ml-1">Delete Playlist</button>
+  </form>
+
+
 
   <div *ngIf="isLoading" class="text-center">
     <h5 class="text-primary text-center">Playlist Loading</h5>
@@ -9,7 +24,7 @@
   </div>
 
   <ngb-tabset *ngIf="!isLoading">
-    <ngb-tab *ngFor="let play of playlists | async" title="{{play.name}}" >
+    <ngb-tab *ngFor="let play of playlists;let playlistIndex = index" title="{{play.name}}" >
       <ng-template ngbTabContent>
 
         <table class="table table-striped">
@@ -37,8 +52,8 @@
             <td>{{ track.name}}</td>
             <td>{{ track.kind}}</td>
             <td>{{ track.sortAlbum}}</td>
-            <td><button class="btn btn-primary btn-sm" (click)="onEdit(track)">Edit</button></td>
-            <td><button class="btn btn-danger btn-sm">Delete</button></td>
+            <td><button type="button" class="btn btn-sm btn-primary" (click)="open(content, track)">Edit</button></td>
+            <td><button type="button" class="btn btn-danger btn-sm" (click)="deleteTrack(track.id,play,i,playlistIndex)">Delete</button></td>
           </tr>
           </tbody>
         </table>
@@ -49,3 +64,56 @@
   </ngb-tabset>
 
 </div>
+
+
+<ng-template #content let-modal>
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="trackForm" (ngSubmit)="onEditTrack()">
+      <div class="form-group">
+        <label for="album">Album</label>
+        <input type="text" formControlName="album" class="form-control" id="album"  placeholder="Enter album">
+      </div>
+      <div class="form-group">
+      <label for="artist">Artist</label>
+      <input type="text" formControlName="artist" class="form-control" id="artist"  placeholder="Enter artist">
+    </div>
+      <div class="form-group">
+        <label for="composer">Composer </label>
+        <input type="text" formControlName="composer" class="form-control" id="composer"  placeholder="Enter composer">
+      </div>
+      <div class="form-group">
+        <label for="genre">Genre </label>
+        <input type="text" formControlName="genre" class="form-control" id="genre"  placeholder="Enter genre">
+      </div>
+      <div class="form-group">
+        <label for="name">Name </label>
+        <input type="text" formControlName="name" class="form-control" id="name"  placeholder="Enter name">
+      </div>
+      <div class="form-group">
+        <label for="kind">Kind </label>
+        <input type="text" formControlName="kind" class="form-control" id="kind"  placeholder="Enter kind">
+      </div>
+      <div class="form-group">
+        <label for="sortAlbum">Sort Album</label>
+        <input type="text" formControlName="sortAlbum" class="form-control" id="sortAlbum"  placeholder="Enter Sort Album">
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm btn-block">Save</button>
+  </form>
+    </div>
+    <div class="modal-footer">
+     <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+    </div>
+
+</ng-template>
+
+
+
+
+
